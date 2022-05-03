@@ -1,3 +1,6 @@
+import numpy as np
+from orderAB import *
+
 def lexsort_based(data):
   sorted_data = data[np.lexsort(data.T),:]
   row_mask = np.append([True],np.any(np.diff(sorted_data,axis=0),1))
@@ -36,8 +39,17 @@ def sampleF(f_maps, Nsamples, opts):
   p1 = np.delete(p1, bool_mask)
   p2 = np.delete(p2, bool_mask)
   #return to numbers in pixel array for both
-  
+  #pain
+  ii = 'idk'
+  jj = 'idk'
+  F = np.zeroes(p1.shape[0], len(f_maps) * 2)
   #for each feature map
   #access feature map by the numbers in each pixel array
+  for i, f_map in enumerate(f_maps):
+    tmp = f_map
+    F[:, i] = tmp(ii)
+    F[:, i + len(f_maps)] = tmp(jj)
   #order if model half space only
-  for f_map in f_maps:
+  if opts['model_half_space_only']:
+    F = orderAB(F)
+  return F

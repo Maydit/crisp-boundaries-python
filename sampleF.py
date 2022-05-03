@@ -53,5 +53,4 @@ def sampleF(f_maps, Nsamples, opts):
   #order if model half space only
   if opts['model_half_space_only']:
     F = orderAB(F)
-  print(F.shape)
   return F

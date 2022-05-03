@@ -25,7 +25,7 @@ def getW(image, opts):
     f_maps = []
     for i in range(len(opts['features']['which_features'])):
       f_maps.append(getFeatures(image, s + 1 + scale_offset, opts['features']['which_features'][i], opts))
-    
+
     Ws_each_feature_set[s] = [0]*len(f_maps) #init these
     
     for feature_set_iter in range(len(f_maps)):
@@ -41,7 +41,7 @@ def getW(image, opts):
         p = learnP_A_B(f_maps_curr, opts)
         if opts['display_progress']:
           op_time = time.time() - op_time
-          print('done: {op_time:.2f} sec\n')
+          print(f'done: {op_time:.2f} sec\n')
         if opts['approximate_PMI']:
           if opts['display_progress']:
             print('learning PMI predictor...')
@@ -49,7 +49,7 @@ def getW(image, opts):
           rf = learnPMIPredictor(f_maps_curr,p,opts)
           if opts['display_progress']:
             op_time = time.time() - op_time
-            print('done: {op_time:.2f} sec\n')
+            print(f'done: {op_time:.2f} sec\n')
         else:
           rf = [] #TODO initialize like something
       if opts['display_progress']:
@@ -61,7 +61,7 @@ def getW(image, opts):
         raise ValueError('Unrecognized model type')
       if opts['display_progress']:
         op_time = time.time() - op_time
-        print('done: {op_time:.2f} sec\n')
+        print(f'done: {op_time:.2f} sec\n')
       if feature_set_iter == 0:
         Ws[num_scales - s + 1] = Ws_each_feature_set[num_scales - s + 1][feature_set_iter]
       else:

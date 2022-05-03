@@ -37,30 +37,30 @@ def getW(image, opts):
       if s == 0 or not opts['only_learn_on_first_scale']:
         if opts['display_progress']:
           print('learning image model...')
-          op_time = time.time()
+          op_time = time.perf_counter()
         p = learnP_A_B(f_maps_curr, opts)
         if opts['display_progress']:
-          op_time = time.time() - op_time
+          op_time = time.perf_counter() - op_time
           print(f'done: {op_time:.2f} sec\n')
         if opts['approximate_PMI']:
           if opts['display_progress']:
             print('learning PMI predictor...')
-            op_time = time.time()
+            op_time = time.perf_counter()
           rf = learnPMIPredictor(f_maps_curr,p,opts)
           if opts['display_progress']:
-            op_time = time.time() - op_time
+            op_time = time.perf_counter() - op_time
             print(f'done: {op_time:.2f} sec\n')
         else:
-          rf = [] #TODO initialize like something
+          rf = None
       if opts['display_progress']:
         print('building affinity matrix...')
-        op_time = time.time()
+        op_time = time.perf_counter()
       if opts['model_type'] == 'kde':
         Ws_each_feature_set[num_scales - s + 1][feature_set_iter] = buildW_pmi(f_maps_curr, rf, p, opts)
       else:
         raise ValueError('Unrecognized model type')
       if opts['display_progress']:
-        op_time = time.time() - op_time
+        op_time = time.perf_counter() - op_time
         print(f'done: {op_time:.2f} sec\n')
       if feature_set_iter == 0:
         Ws[num_scales - s + 1] = Ws_each_feature_set[num_scales - s + 1][feature_set_iter]

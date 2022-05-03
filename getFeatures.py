@@ -10,11 +10,11 @@ def mat2gray(image):
 
 #no idea if this works as intended...
 def pcaIm(image):
-  im_size = image.shape[:1]
+  im_size = image.shape[:2]
   X = np.reshape(image, (image.shape[0] * image.shape[1], image.shape[2]))
-  pca = PCA()
-  Y = pca.score(X)
-  im = np.reshape(Y, (im_size, image.shape[2]))
+  pca = PCA().fit(X)
+  Y = pca.transform(X)
+  im = np.reshape(Y, (im_size[0], im_size[1], image.shape[2]))
   return im
 
 '''
@@ -39,16 +39,18 @@ def getFeatures(im_rgb, scale, which_feature, opts):
     else:
       raise ValueError('unhandled image format')
   elif which_feature == 'var':
-    f = pcaIm(im_rgb) #i cant figure out what this is supposed to do
+    f = pcaIm(im_rgb)
     Nhood_rad = 2**(scale - 1)
-    se = cv2.getStructuingElement(cv2.MORPH_ELLIPSE, (Nhood_rad * 2, Nhood_rad * 2))
-    #se = strel('disk',Nhood_rad, 0)
+    se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (Nhood_rad * 2, Nhood_rad * 2))
+    se = np.expand_dims(se, 2)
     vf = mat2gray(np.sqrt(generic_filter(f, np.std, footprint=se)))
+    #I cannot believe this works. lmk if it really does the same thing.
+    #why do we take the sqrt of the stdev?
     im = vf
   else:
     raise ValueError(f'feature type {which_feature} not recognized')
-  width = im.shape[1] * 2**(-(scale - 1))
-  height = im.shape[0] * 2 **(-(scale - 1))
+  width = int(np.round(im.shape[1] * 2**(-(scale - 1))))
+  height = int(np.round(im.shape[0] * 2 **(-(scale - 1))))
   im = cv2.resize(im, (width, height))
   if opts['features']['decorrelate']:
     im = mat2gray(pcaIm(im))

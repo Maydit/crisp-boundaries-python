@@ -46,12 +46,12 @@ def setEnvironment(_type):
     opts['approximate_PMI'] = True
     opts['num_scales'] = 1
     opts['spectral_clustering']['approximate'] = True
-  elif _type == 'accurate_multiscale'
+  elif _type == 'accurate_multiscale':
     opts['approximate_PMI'] = True
     opts['PMI_predictor']['Ntrees'] = 32
-  elif _type == 'MS_algorithm_from_paper'
+  elif _type == 'MS_algorithm_from_paper':
     opts['approximate_PMI'] = False
-  elif _type == 'compile_test'
+  elif _type == 'compile_test':
     opts['kde']['Nkernels'] = 10
     opts['kde']['learn_bw'] = False
     opts['approximate_PMI'] = True

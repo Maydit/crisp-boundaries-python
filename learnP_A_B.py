@@ -3,7 +3,7 @@ from scipy.stats import gaussian_kde
 
 '''
 learns a model p for P(A,B) based on f_maps which are image statistics
-f_maps - NxMxF array of F feature maps for NxM image.. really a list
+f_maps - NxMxF array of F feature maps for NxM image
 
 p - model for P(A,B)
 '''
